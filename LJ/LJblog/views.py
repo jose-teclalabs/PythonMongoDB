@@ -10,6 +10,8 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import permissions
+from django.utils import simplejson
+from django.shortcuts import render,render_to_response,RequestContext
 
 @api_view(['GET'])
 def post_list(request, format=None):
@@ -19,7 +21,7 @@ def post_list(request, format=None):
         return data
 
     if request.method == 'GET':
-        data = Post.objects.filter(is_published=True)
+        data = Post.objects.filter()
         dic = []
         print data
         for element in data:
@@ -38,11 +40,15 @@ def guardar_post(request, format=None):
         
         text = request.DATA['text']
         title = request.DATA['title']
-        is_published = request.DATA['is_published']
+        #is_published = request.DATA['is_published']
 
-        guardado = Post(text=text,title=title,is_published=is_published)
+        #guardado = Post(text=text,title=title,is_published=is_published)
+        guardado = Post(text=text,title=title)
+        print guardado
+
         valor = guardado.save()
-
+        print 'IPPPPP'
+        print valor.pk
         diccionario = {'resultado':'satisfactorio'}
 
         return Response (diccionario)
@@ -129,3 +135,24 @@ class PostDeleteView(DeleteView):
         return Post.objects(id=self.kwargs['pk'])[0]
 
 
+def quiz_guess(request, fact_id):   
+    message = {"fact_type": "", "fact_note": ""}
+    if request.is_ajax():
+        fact = get_object_or_404(Fact, id=fact_id)
+        message['fact_type'] = fact.type
+        message['fact_note'] = fact.note
+    else:
+        message = "You're the lying type, I can just tell."
+        json = simplejson.dumps(message)
+    return HttpResponse(json, mimetype='application/json')
+
+
+def goServices(request):
+    return render_to_response("LJblog/ajax_in_django.html",context_instance=RequestContext(request))
+
+
+def goapiGoogle(request):
+    return render_to_response("LJblog/example_get.html",context_instance=RequestContext(request))
+
+def goPost(request):
+    return render_to_response("LJblog/postData.html",context_instance=RequestContext(request))

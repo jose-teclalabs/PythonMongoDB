@@ -27,3 +27,27 @@ class Post(Document):
     def get_delete_url(self):
         return reverse('delete', args=[self.id])
 
+
+class Person(Document):
+    nombre =StringField(max_length=200, required=True)
+    apellidos = StringField(max_length=200, required=True)
+    descripcion = StringField(max_length=200, required=True)
+    text_length = IntField()
+    date_modified = DateTimeField(default=datetime.now)
+
+    def __unicode__(self):
+        return self.nombre
+
+    def save(self,*args,**kwargs):
+        self.text_length = len(self.descripcion)
+        return super(Person,self).save(*args,**kwargs)
+        
+    def get_absolute_url(self):
+        return reverse('detail', args=[self.id])
+
+    def get_edit_url(self):
+        return reverse('update', args=[self.id])
+
+    def get_delete_url(self):
+        return reverse('delete', args=[self.id])
+
