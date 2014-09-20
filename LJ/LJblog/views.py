@@ -56,6 +56,50 @@ def guardar_post(request, format=None):
     else:
         return Response(Constantes.CONST_ERROR_SERVICE, status=status.HTTP_400_BAD_REQUEST)
 
+@api_view(['POST'])
+def guardar_persona(request, format=None):
+    if request.method == 'POST':
+        
+        nombre = request.DATA['nombres']
+        apellidos = request.DATA['apellidos']
+        descripcion = request.DATA['descripcion']
+
+        guardado = Person(nombre=nombre,apellidos=apellidos,descripcion=descripcion)
+        print guardado
+
+        valor = guardado.save()
+        print 'IPPPPP'
+        print valor.pk
+        diccionario = {'resultado':'satisfactorio'}
+
+        return Response (diccionario)
+
+    else:
+        return Response(Constantes.CONST_ERROR_SERVICE, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+def persona_list(request, format=None):
+    def convert_to_json(element):
+        data = {'nombre':element.nombre,
+        'apellidos':element.apellidos,
+        'descripcion':element.descripcion,}
+        return data
+
+    if request.method == 'GET':
+        data = Person.objects.filter()
+        dic = []
+        print data
+        for element in data:
+            print element
+            dic.append(convert_to_json(element))
+        print dic
+        return Response(dic)
+    else:
+        dic = {'error':'errors'}
+        return Response(dic, status=status.HTTP_400_BAD_REQUEST)
+
+
 
 class PostListView(ListView):
     model = Post
@@ -156,3 +200,12 @@ def goapiGoogle(request):
 
 def goPost(request):
     return render_to_response("LJblog/postData.html",context_instance=RequestContext(request))
+
+def goIndex(request):
+    return render_to_response("LJblog/index.html",context_instance=RequestContext(request))
+
+def goHistoria(request):
+    return render_to_response("LJblog/historia.html",context_instance=RequestContext(request))
+
+def goGallery(request):
+    return render_to_response("LJblog/gallery.html",context_instance=RequestContext(request))

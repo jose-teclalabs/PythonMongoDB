@@ -13,7 +13,8 @@ urlpatterns = patterns('',
     url(r'^Services$',views.goServices, name='mostrar'),
     url(r'^Google$',views.goapiGoogle, name='goapiGoogle'),
     url(r'^Post$',views.goPost, name='goPost'),
-    
+    url(r'^Hostoria$',views.goHistoria, name='goHistoria'),
+    url(r'^Gallery$',views.goGallery, name='goGallery')
 
 )
 

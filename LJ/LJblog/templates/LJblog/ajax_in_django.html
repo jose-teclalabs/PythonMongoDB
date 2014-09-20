@@ -22,6 +22,21 @@
 		});
 
 	</script>
+
+	<script type="text/javascript">
+		$(document).ready(function() { 
+			console.log('entra1')
+				console.log('entra')
+				$.get("post/list.json", function(data) {
+				console.log(data)
+				var $select = $('#myselect');
+
+				$.each(data, function(key, val){
+   				$select.append('<option id="' + val.id + '">' + val.titulo + '</option>');});
+			});
+		});
+
+	</script>
 	</head>
 	<body>
 
@@ -32,5 +47,15 @@
 	    <button id="btn382" type="button">Click to load car sale report (json type)</button>   
 	    &nbsp;<a href="/backend/data/car-sale.json" target="_blank">Original car sale report</a>
 	</div>
+	
+	<select id="myselect">
+ 
+	</select>
+
 	</body>
+
+
+
+
+
 </html>
